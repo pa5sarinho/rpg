@@ -25,17 +25,35 @@ function animateBtn(btn, x, y, xtravel, ytravel)
 function showActionButtons(x, y)
 {
     const observar = document.createElement('button');
+    const virAqui = document.createElement('button');
+    const acampar = document.createElement('button');
 
     observar.className = 'ui-layer';
     observar.id = 'btn-observar';
     observar.innerText = 'Observar arredores';
 
+    virAqui.className = 'ui-layer';
+    virAqui.id = 'btn-viraqui';
+    virAqui.innerText = 'Vir até aqui';
+
+    acampar.className = 'ui-layer';
+    acampar.id = 'btn-acampar';
+    acampar.innerText = 'Montar acampamento';
+
     animateBtn(observar, x-100, y, 0, -60);
+    animateBtn(virAqui, x-90, y, -90, 0);
+    animateBtn(acampar, x-60, y, 120, 0)
 }
 
 function removeActionButtons() {
     const observar = document.getElementById('btn-observar');
+    const virAqui = document.getElementById('btn-viraqui');
+    const acampar = document.getElementById('btn-acampar');
+
     observar.remove();
+    virAqui.remove();
+    acampar.remove();
+
     actionButtonsActivated = false;
 }
 
@@ -57,4 +75,16 @@ document.addEventListener("click", function(event)
     }
     
     else if (actionButtonsActivated && zIndex != 1) removeActionButtons();
+});
+
+// esse evento tem controle sobre todas as teclas pressionadass
+document.addEventListener('keydown', function(event)
+{
+    const key = event.key;
+    console.log('pressionou', key);
+
+    if (key == 'Escape')
+    {
+        if (actionButtonsActivated) removeActionButtons();
+    }
 });
