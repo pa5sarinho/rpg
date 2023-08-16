@@ -21,6 +21,7 @@ const mapobj = document.getElementById("map");
 let grid_Xaxis = Math.ceil(window.innerWidth/gridSize);
 let grid_Yaxis = Math.ceil(window.innerHeight/gridSize);
 
+// esse loop renderiza apenas a área visível na tela
 for (let y_index = 0; y_index < grid_Yaxis; y_index++)
 {
     const grid_row = document.createElement('div');
