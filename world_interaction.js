@@ -1,10 +1,11 @@
 let cursor = {x: 0, y: 0};
 let isWindowOpen = false;
 let actionButtonsActivated = false;
-let windowMode = 'null';
+let windowMode = 'null'; // argumento kind em openWindow
 
 function animateElement(obj, x, y, xtravel=0, ytravel=0, center=false)
-// o objeto, o X inicial, o Y inicial, quanto deve andar para x e y em pixels
+// o objeto, o X inicial, o Y inicial
+// quanto deve deslocar para x e y em pixels OU se deve parar no centro da tela
 {
     obj.style.opacity = 0;
     obj.style.transition = 'all 0.4s ease-in-out';
@@ -19,12 +20,17 @@ function animateElement(obj, x, y, xtravel=0, ytravel=0, center=false)
 
     if (center)
     {
-        obj.style.justifyContent = 'center';
+        screenHeightSplit = (window.innerHeight - 500)/2;
+        screenWidthSplit = (window.innerWidth - 700)/2;
+        console.log(screenHeightSplit);
+        obj.style.bottom = screenHeightSplit + "px";
+        obj.style.right = screenWidthSplit + "px";
     }
 
     else {
 
-        if (x+xtravel >= 0 && x+xtravel <= window.innerWidth) x += xtravel;
+        if (x+xtravel >= 0) x += xtravel;
+        else if (x+xtravel-obj.innerWidth > window.innerWidth) x -= obj.innerWidth;
         else x = 0;
 
         if (y+ytravel >= 0 && y+ytravel <= window.innerHeight) y += ytravel;
@@ -80,9 +86,9 @@ function openWindow(kind)
     windowMode = kind;
 
     // TO-DO estilizar cada tipo de janela
-    if (kind == 'map')
+    if (kind == 'mapa')
     {
-        ui_window.innerText = 'this is the map';
+        ui_window.innerText = 'mapinha';
     }
 
     else if (kind == 'inventario')
@@ -95,9 +101,7 @@ function openWindow(kind)
         ui_window.innerText = 'menu';
     }
 
-    ytravel = (-window.innerHeight/2);
-
-    animateElement(ui_window, window.innerWidth/4, window.innerHeight, center=true);
+    animateElement(ui_window, 0, window.innerHeight, center=true);
 
     isWindowOpen = true;
 }
@@ -179,7 +183,7 @@ document.addEventListener('keydown', function(event)
     else if (key == 'm')
     {
         if(isWindowOpen) closeWindow();
-        openWindow('map');
+        openWindow('mapa');
     }
     else if (key == 'i')
     {
