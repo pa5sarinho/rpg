@@ -3,12 +3,14 @@ let isWindowOpen = false;
 let actionButtonsActivated = false;
 let windowMode = 'null'; // argumento kind em openWindow
 
-function animateElement(obj, x, y, xtravel=0, ytravel=0, center=false)
+document.getElementById()
+
+function animateElement(obj, x, y, xtravel=0, ytravel=0)
 // o objeto, o X inicial, o Y inicial
 // quanto deve deslocar para x e y em pixels OU se deve parar no centro da tela
 {
     obj.style.opacity = 0;
-    obj.style.transition = 'all 0.4s ease-in-out';
+    obj.style.transition = 'all 0.3s ease-in-out';
 
     obj.style.left = x + "px";
     obj.style.top = y + "px";
@@ -18,27 +20,15 @@ function animateElement(obj, x, y, xtravel=0, ytravel=0, center=false)
     void obj.offsetWidth;
     obj.style.opacity = 1;
 
-    if (center)
-    {
-        screenHeightSplit = (window.innerHeight - 500)/2;
-        screenWidthSplit = (window.innerWidth - 700)/2;
-        console.log(screenHeightSplit);
-        obj.style.bottom = screenHeightSplit + "px";
-        obj.style.right = screenWidthSplit + "px";
-    }
+    if (x+xtravel >= 0) x += xtravel;
+    else if (x+xtravel-obj.innerWidth > window.innerWidth) x -= obj.innerWidth;
+    else x = 0;
 
-    else {
+    if (y+ytravel >= 0 && y+ytravel <= window.innerHeight) y += ytravel;
+    else y = 0;
 
-        if (x+xtravel >= 0) x += xtravel;
-        else if (x+xtravel-obj.innerWidth > window.innerWidth) x -= obj.innerWidth;
-        else x = 0;
-
-        if (y+ytravel >= 0 && y+ytravel <= window.innerHeight) y += ytravel;
-        else y = 0;
-
-        obj.style.left = x + "px";
-        obj.style.top = y + "px";
-    }
+    obj.style.left = x + "px";
+    obj.style.top = y + "px";
 }
 
 function showActionButtons(x, y)
@@ -101,7 +91,9 @@ function openWindow(kind)
         ui_window.innerText = 'menu';
     }
 
-    animateElement(ui_window, 0, window.innerHeight, center=true);
+    ytravel = -(window.innerHeight/2)-300;
+    xtravel = (window.innerWidth-700)/2;
+    animateElement(ui_window, 0, window.innerHeight, xtravel, ytravel);
 
     isWindowOpen = true;
 }
@@ -166,6 +158,8 @@ document.addEventListener("click", function(event)
         }
         // TO-DO adicionar outros tipos de janela
     }
+
+
 });
 
 // esse evento tem controle sobre todas as teclas pressionadass
