@@ -3,7 +3,11 @@ let isWindowOpen = false;
 let actionButtonsActivated = false;
 let windowMode = 'null'; // argumento kind em openWindow
 
-document.getElementById()
+// party-layer da direita pra esquerda
+const playerCard = document.getElementById('player-pic');
+const partyMemberCard1 = document.getElementById('companion1');
+const partyMemberCard2 = document.getElementById('companion2');
+const partyMemberCard3 = document.getElementById('companion3');
 
 function animateElement(obj, x, y, xtravel=0, ytravel=0)
 // o objeto, o X inicial, o Y inicial
@@ -67,7 +71,7 @@ function removeActionButtons()
     actionButtonsActivated = false;
 }
 
-function openWindow(kind)
+function openWindow(kind, x=0, y=innerHeight, xtravel=(window.innerWidth-700)/2, ytravel=-(window.innerHeight/2)-300)
 {
     ui_window = document.createElement('div');
     ui_window.className = 'ui-layer';
@@ -91,18 +95,35 @@ function openWindow(kind)
         ui_window.innerText = 'menu';
     }
 
-    ytravel = -(window.innerHeight/2)-300;
-    xtravel = (window.innerWidth-700)/2;
-    animateElement(ui_window, 0, window.innerHeight, xtravel, ytravel);
+    animateElement(ui_window, x, y, xtravel, ytravel);
 
     isWindowOpen = true;
+    console.log('abriu '+kind);
 }
 
-function closeWindow()
+function closeWindow(x=0, y=window.innerHeight)
 {
-    ui_window = document.getElementById('ui-window');
-    ui_window.remove();
-    isWindowOpen = false;
+    activeWindow = document.getElementById('ui-window');
+
+    void activeWindow.offsetWidth;
+    activeWindow.style.opacity = 0;
+    activeWindow.style.left = x + "px";
+    activeWindow.style.top = y + "px";
+
+    // esperar a animação finalizar pra só então deletar a janela
+    setTimeout(function() {
+        try
+        {
+            activeWindow.remove();
+            activeWindow = null;
+            isWindowOpen = false;
+            console.log('janela fechada');
+        }
+        catch (TypeError) {
+            // quando apertamos esc repetidamente isso acontece, nada demais
+            console.log('oopsie: activeWindow é nulo')
+        }
+    }, 300);
 }
 
 // esse evento tem controle sobre todos os cliques na janela de jogo
@@ -171,18 +192,26 @@ document.addEventListener('keydown', function(event)
     if (key == 'Escape')
     {
         if (actionButtonsActivated) removeActionButtons();
-        else if (isWindowOpen) closeWindow();
+        else if (isWindowOpen)
+        {
+            if (windowMode == 'partymember')
+                closeWindow(x=window.innerWidth);
+            else closeWindow();
+        }
         else openWindow('menu');
     }
     else if (key == 'm')
     {
-        if(isWindowOpen) closeWindow();
-        openWindow('mapa');
+        if (!isWindowOpen) openWindow('mapa');
     }
     else if (key == 'i')
     {
-        if (isWindowOpen) closeWindow();
-        openWindow('inventario')
+        if (!isWindowOpen) openWindow('inventario');
     }
 });
 
+// event listeners para os perfis da party
+playerCard.addEventListener('click', function()
+{ // bugado pra caralho; consertar dps
+    if (!isWindowOpen) openWindow('partymember', x=window.innerWidth, xtravel=(-window.innerWidth-700));
+});

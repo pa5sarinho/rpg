@@ -35,7 +35,7 @@ body {
 .ui-layer {
     z-index: 1;
     background-color: #f0f0f0;
-    color: black;
+    color: #1f1f1f;
 }
 
 #ui-window {
@@ -43,6 +43,7 @@ body {
     width: 700px;
     border-radius: 10px;
     display: flexbox;
+    padding: 10px;
 }
 
 #menu-buttons {
