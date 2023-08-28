@@ -1,7 +1,8 @@
 let cursor = {x: 0, y: 0};
-let isWindowOpen = false;
 let actionButtonsActivated = false;
+let isWindowOpen = false;
 let windowMode = 'null'; // argumento kind em openWindow
+const WINDOWSIZE = {w: 700, h: 500};
 
 // party-layer da direita pra esquerda
 const playerCard = document.getElementById('player-pic');
@@ -9,9 +10,11 @@ const partyMemberCard1 = document.getElementById('companion1');
 const partyMemberCard2 = document.getElementById('companion2');
 const partyMemberCard3 = document.getElementById('companion3');
 
-function animateElement(obj, x, y, xtravel=0, ytravel=0)
+console.log(window.innerWidth);
+
+function animateElement(obj, x, y, xtravel=0, ytravel=0, rel='left')
 // o objeto, o X inicial, o Y inicial
-// quanto deve deslocar para x e y em pixels OU se deve parar no centro da tela
+// quanto deve deslocar para x e y em pixels, o lado relativo
 {
     obj.style.opacity = 0;
     obj.style.transition = 'all 0.3s ease-in-out';
@@ -24,14 +27,17 @@ function animateElement(obj, x, y, xtravel=0, ytravel=0)
     void obj.offsetWidth;
     obj.style.opacity = 1;
 
-    if (x+xtravel >= 0) x += xtravel;
-    else if (x+xtravel-obj.innerWidth > window.innerWidth) x -= obj.innerWidth;
+    if (x+xtravel > 0) x += xtravel;
     else x = 0;
 
-    if (y+ytravel >= 0 && y+ytravel <= window.innerHeight) y += ytravel;
+    if (y+ytravel > 0 && y+ytravel <= window.innerHeight) y += ytravel;
     else y = 0;
 
-    obj.style.left = x + "px";
+    if (rel == 'left')
+        obj.style.left = x + "px";
+    else if (rel == 'right')
+        obj.style.right = x + "px";
+    
     obj.style.top = y + "px";
 }
 
@@ -71,7 +77,10 @@ function removeActionButtons()
     actionButtonsActivated = false;
 }
 
-function openWindow(kind, x=0, y=innerHeight, xtravel=(window.innerWidth-700)/2, ytravel=-(window.innerHeight/2)-300)
+function openWindow(kind, x=0, y=window.innerHeight,
+                    xtravel=(window.innerWidth-WINDOWSIZE.w)/2,
+                    ytravel=-(window.innerHeight/2)-300,
+                    rel='left')
 {
     ui_window = document.createElement('div');
     ui_window.className = 'ui-layer';
@@ -95,7 +104,7 @@ function openWindow(kind, x=0, y=innerHeight, xtravel=(window.innerWidth-700)/2,
         ui_window.innerText = 'menu';
     }
 
-    animateElement(ui_window, x, y, xtravel, ytravel);
+    animateElement(ui_window, x, y, xtravel, ytravel, rel);
 
     isWindowOpen = true;
     console.log('abriu '+kind);
@@ -126,6 +135,7 @@ function closeWindow(x=0, y=window.innerHeight)
     }, 300);
 }
 
+//   ------------- GAME LOOP DO ESTADO "EXPLORANDO" -------------
 // esse evento tem controle sobre todos os cliques na janela de jogo
 document.addEventListener("click", function(event)
 {
@@ -212,6 +222,7 @@ document.addEventListener('keydown', function(event)
 
 // event listeners para os perfis da party
 playerCard.addEventListener('click', function()
-{ // bugado pra caralho; consertar dps
-    if (!isWindowOpen) openWindow('partymember', x=window.innerWidth, xtravel=(-window.innerWidth-700));
+{
+    if (!isWindowOpen) openWindow('partymember', window.innerWidth, window.innerHeight,
+                                (window.innerWidth-WINDOWSIZE.w)/2, -(window.innerHeight/2)-300,'right');
 });
