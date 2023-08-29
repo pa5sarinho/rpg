@@ -6,12 +6,14 @@
     <body>
         <div id="upper-toolbar" class="ui-layer"></div>
 
-        <div class="map-layer" id="map"></div>
+        <div class="map-layer" id="map">
+            <!--grids do método draw de Map são adicionados aqui-->
+        </div>
 
         <div id="lower-toolbar" class="ui-layer">
-            <div class="toolbar-item" id="btn-inventario">Bag</div>
-            <div class="toolbar-item" id="btn-caderno">Log</div>
-            <div class="toolbar-item" id="btn-mapa">Map</div>
+            <a class="toolbar-item" id="btn-inventario" href="">Bag</a>
+            <div class="toolbar-item" id="btn-caderno" href="">Log</div>
+            <div class="toolbar-item" id="btn-mapa" href="">Map</div>
         </div>
         
         <div class="party-layer">
@@ -21,7 +23,6 @@
             <div class="party-member" id="player-pic"></div>
         </div>
     </div>
-    <script src="draw_map.js"></script>
-    <script src="world_interaction.js"></script>
+    <script type="module" src="exploring.js"></script>
     </body>
 </html>
