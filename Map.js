@@ -1,9 +1,9 @@
 export class Map
 {
-    constructor(mapDocObject)
+    constructor(mapDocObject, gridSize)
     {
         this.mapDocObject = mapDocObject;
-        this.gridSize = 50;
+        this.gridSize = gridSize;
     }
 
     draw(width, height)
@@ -21,6 +21,8 @@ export class Map
             {
                 const grid = document.createElement('div');
                 grid.className = 'grid-item';
+                grid.style.height = this.gridSize + "px";
+                grid.style.width = this.gridSize + "px";
                 grid.id = `(${x_index}, ${y_index})`;
                 //grid.textContent = map[y_index][x_index];
                 grid_row.appendChild(grid);

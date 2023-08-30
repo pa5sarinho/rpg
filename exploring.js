@@ -16,7 +16,7 @@ const partyMemberCard3 = document.getElementById('companion3');
 
 win.maximize();
 
-let map = new Map(document.getElementById('map'));
+let map = new Map(document.getElementById('map'), 30);
 map.draw(win.width, win.height);
 
 function animateElement(obj, x, y, xtravel=0, ytravel=0, rel='left')
