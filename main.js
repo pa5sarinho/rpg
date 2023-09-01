@@ -1,0 +1,1 @@
+nw.Window.open('./canvas/world_view.html', {}, function(win) {});
